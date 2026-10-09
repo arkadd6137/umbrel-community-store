@@ -1,0 +1,39 @@
+manifestVersion: 1.1
+id: semisi-qbittorrent-vpn
+category: networking
+name: qBittorrent (PIA VPN)
+version: "5.2.4"
+tagline: qBittorrent routed through Private Internet Access WireGuard with a kill switch
+icon: https://getumbrel.github.io/umbrel-apps-gallery/qbittorrent/icon.svg
+description: >-
+  qBittorrent using the hotio image (the same one the official Umbrel app uses) with hotio's
+  built-in WireGuard VPN enabled for Private Internet Access.
+
+
+  All torrent traffic leaves through the wg0 tunnel; the container firewall blocks anything else
+  (kill switch). PIA port forwarding is requested automatically and qBittorrent's listening port
+  is set to the forwarded port.
+
+
+  Before first use, set these in app Settings → Advanced → Environment variables → Custom
+  variables (service "server"): VPN_PIA_USER and VPN_PIA_PASS. Never commit them to git.
+
+
+  On first start qBittorrent prints a temporary WebUI password in the app logs; set a permanent one in Options → WebUI.
+developer: qBittorrent / hotio
+website: https://hotio.dev/containers/qbittorrent/
+submitter: Semisi
+submission: https://github.com/arkadd6137/umbrel-community-store
+repo: https://github.com/hotio/qbittorrent
+support: https://github.com/hotio/qbittorrent/issues
+port: 8095
+gallery: []
+releaseNotes: >-
+  Initial release: qBittorrent 5.2.4 (hotio) with PIA WireGuard, region ca_vancouver, auto port forwarding.
+dependencies: []
+path: ""
+defaultUsername: "admin"
+defaultPassword: ""
+torOnly: false
+permissions:
+  - STORAGE_DOWNLOADS

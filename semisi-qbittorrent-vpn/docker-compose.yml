@@ -1,0 +1,40 @@
+version: "3.7"
+
+services:
+  app_proxy:
+    environment:
+      APP_HOST: semisi-qbittorrent-vpn_server_1
+      APP_PORT: 8080
+      PROXY_AUTH_ADD: "true"
+      PROXY_AUTH_WHITELIST: "/api/*"
+
+  server:
+    image: ghcr.io/hotio/qbittorrent:release-5.2.4@sha256:e88231af111f58f9a7e7a80e8dbd84f56a8d2ee27938326eea7a62db6148f1a5
+    restart: on-failure
+    cap_add:
+      - NET_ADMIN
+    sysctls:
+      - net.ipv4.conf.all.src_valid_mark=1
+      - net.ipv6.conf.all.disable_ipv6=1
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - UMASK=002
+      - TZ=America/Denver
+      - WEBUI_PORTS=8080/tcp
+      - VPN_ENABLED=true
+      - VPN_CONF=wg0
+      - VPN_PROVIDER=pia
+      # LAN subnet for direct access. Docker networks (umbrel_main_network 10.21.0.0/16) are
+      # detected automatically via VPN_INTERFACE_PREFIXES (eth) and get WEBUI_PORTS access.
+      - VPN_LAN_NETWORK=10.61.10.0/24
+      - VPN_LAN_LEAK_ENABLED=false
+      - VPN_AUTO_PORT_FORWARD=true
+      - VPN_PIA_PREFERRED_REGION=ca_vancouver
+      - VPN_PIA_PORT_FORWARD_PERSIST=true
+      - VPN_HEALTHCHECK_ENABLED=true
+      - PRIVOXY_ENABLED=false
+      # VPN_PIA_USER and VPN_PIA_PASS are supplied by Umbrel app settings (custom env vars).
+    volumes:
+      - ${APP_DATA_DIR}/data/config:/config
+      - ${UMBREL_ROOT}/data/storage/downloads:/downloads
